@@ -1,0 +1,50 @@
+package csen1002.main.task5;
+
+/**
+ * Write your info here
+ * 
+ * @name John Smith
+ * @id 43-0234
+ * @labNumber 07
+ */
+public class CFG {
+	/**
+	 * CFG constructor
+	 * 
+	 * @param description is the string describing a CFG
+	 */
+	String[] language ;
+	public CFG(String description) {
+		// TODO Write Your Code Here
+		
+	    language = description.split(";");
+	
+	}
+
+	/**
+	 * Returns a string of elimnated left recursion.
+	 * 
+	 * @param input is the string to simulate by the CFG.
+	 * @return string of elimnated left recursion.
+	 */
+	public String lre() {
+		String result = "";
+		System.out.println(language.length );
+		for(int i = 0 ; i < language.length ; i++)
+		{
+			for(int j = 0 ; j < i ; j++)
+			{
+				String[] firstLanguage = language[i].split(",");
+				String firstLetter = firstLanguage[0];
+				System.out.println(firstLetter);
+			}
+		}
+		return result;
+	}
+	
+	public static void main (String[] args)
+	{
+		CFG cfg = new CFG("S;ScT;Sa;T;b;T;aSb;iaLb;i;L;SdL;S");
+		
+	}
+}

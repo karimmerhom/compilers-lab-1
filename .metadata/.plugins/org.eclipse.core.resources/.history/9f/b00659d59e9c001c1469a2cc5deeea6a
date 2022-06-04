@@ -1,0 +1,30 @@
+package csen1002.main.task1;
+
+/**
+ * Write your info here
+ * 
+ * @name John Smith
+ * @id 43-0234
+ * @labNumber 07
+ */
+public class DFA {
+	/**
+	 * DFA constructor
+	 * 
+	 * @param description is the string describing a DFA
+	 */
+	public DFA(String description) {
+		// TODO Write Your Code Here
+	}
+
+	/**
+	 * Returns true if the string is accepted by the DFA and false otherwise.
+	 * 
+	 * @param input is the string to check by the DFA.
+	 * @return if the string is accepted or not.
+	 */
+	public boolean run(String input) {
+		// TODO Write Your Code Here
+		return false;
+	}
+}

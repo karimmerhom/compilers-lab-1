@@ -1,0 +1,104 @@
+package csen1002.main.task7;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import csen1002.main.task1.DFA;
+
+/**
+ * Write your info here
+ * 
+ * @name John Smith
+ * @id 43-0234
+ * @labNumber 07
+ */
+public class LL1CFG {
+	String first [] ;
+	String follow [] ;
+	String CFG [] ;
+	String vArr [] ;
+	String tArr[] ;
+	String parsingTable[][];
+	public LL1CFG(String description) {
+		String v = "" ;
+		String t = "" ;
+		String intitialSplit [] = description.split("#");
+		CFG = intitialSplit[0].split(";");
+		first = intitialSplit[1].split(";");
+		follow = intitialSplit[2].split(";");
+		System.out.println("CFG " + intitialSplit[0]);
+		System.out.println("First " + intitialSplit[1]);
+		System.out.println("Follow " + intitialSplit[2]);
+		
+		for(int i = 0 ; i < CFG.length ; i++ )
+		{
+			v+= CFG[i].charAt(0);
+		}
+		
+		for(int i = 0 ; i < CFG.length ; i++)
+		{
+			String firstRule [] = CFG[i].split(",");
+			for(int j = 0 ; j < firstRule.length ; j ++)
+			{
+				String firstInFirstRule  = firstRule[j];
+				for(int z = 0 ; z < firstInFirstRule.length() ; z ++)
+				{
+					if(!(Character.isUpperCase(firstInFirstRule.charAt(z))) &&  firstInFirstRule.charAt(z) != 'e' )
+					{
+						if(!(t.contains(String.valueOf(firstInFirstRule.charAt(z)))))
+						{
+						t+= firstInFirstRule.charAt(z) ;
+						}
+					}
+				}
+			}
+		}
+		
+		System.out.println("variables " + v);
+		vArr = v.split("");
+		t+="$";
+		System.out.println("terminals " + t);
+		tArr = t.split("");
+		parsingTable = new String[v.length()][t.length()];
+		
+		System.out.println(parsingTable.length);
+		System.out.println(parsingTable[0].length);
+		
+		for (int i = 0 ; i < parsingTable.length ; i ++)
+		{
+			//variables
+			
+			for(int j = 0 ; j < parsingTable[i].length ; j ++ )
+			{
+				String firstAtI[] = first[i].split(",");
+				for( int z = 0 ; z < firstAtI.length ; z++)
+				{
+					if(firstAtI[z].length() == 1) {
+					if(tArr[j].equals(firstAtI[z]))
+					{
+						String cfgRule [] = CFG[i].split(",");
+						parsingTable[i][j] = cfgRule[z+1] ;
+					}
+			     }
+			  }
+			}
+		}
+		for (int i = 0; i < parsingTable.length; i++) { //this equals to the row in our matrix.
+	         for (int j = 0; j < parsingTable[i].length; j++) { //this equals to the column in each row.
+	            System.out.print(parsingTable[i][j] + " ");
+	         }
+	         System.out.println(); //change line on console as row comes to end in the matrix.
+	      }
+	//	System.out.println(parsingTable[0][0]);
+	}
+
+	public String parse(String input) {
+	
+		return null;
+	}
+
+	public static void main (String[] args)
+	{
+		LL1CFG ll1cfg1 = new LL1CFG("S,zToS,n,e;T,zTo,No;N,n,e#S,z,n,e;T,z,no;N,n,e#S,$;T,o;N,o");
+	//	ll1cfg1.parse("zzznoooon");
+	}
+}

@@ -1,0 +1,179 @@
+package csen1002.main.task6;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import csen1002.main.task5.CFG;
+
+/**
+ * Write your info here
+ * 
+ * @name John Smith
+ * @id 43-0234
+ * @labNumber 07
+ */
+
+public class FFCFG {
+ 
+	String rules = " " ;
+	
+	public FFCFG(String description) {
+
+		rules =  description;
+		
+	}
+
+	/**
+	 * Calculates the First of each variable in the CFG.
+	 * 
+	 * @return A string representation of the First of each variable in the CFG,
+	 *         formatted as specified in the task description.
+	 */
+	public String first() {
+		String[] rulesSplitted = rules.split(";");	
+		String[] first = new String [rulesSplitted.length];
+		for ( int i = 0 ; i < rulesSplitted.length ; i++ )
+		{
+			first[i] = "";
+		}
+		Boolean change = true ;
+		while(change)
+		{
+			Boolean epsilon = true;
+			change = false ;
+			for(int i = 0 ; i < rulesSplitted.length ; i++)
+			{
+				String[] SplittedRules = rulesSplitted[i].split(",");	
+		//		System.out.println(rulesSplitted[i]+" "+i);
+				for(int j = 1 ; j < SplittedRules.length ; j++ )
+				{
+				    epsilon = true;
+					for(int z = 0 ; z < SplittedRules[j].length() && epsilon ; z++ )
+					{
+						System.out.println(SplittedRules[j]+" "+j);
+
+						if(Character.isLowerCase(SplittedRules[j].charAt(0)) && SplittedRules[j].length() != 1 )
+						{
+							if(! first[i].contains(String.valueOf(SplittedRules[j].charAt(0))))
+							{
+							first[i] = first[i] + SplittedRules[j].charAt(0) ;
+							}
+						}
+						if(Character.isLowerCase(SplittedRules[j].charAt(z)) && SplittedRules[j].length() == 1 )
+						{
+							if(! first[i].contains(SplittedRules[j]))
+							{
+							first[i] = first[i] + SplittedRules[j] ;
+							}
+						}
+						if(Character.isLowerCase(SplittedRules[j].charAt(z)) && !(SplittedRules[j].endsWith("e")) )
+						{
+							epsilon = false;
+						}
+						else
+						{
+							for(int x = 0 ; x < rulesSplitted.length ; x ++ )
+							{
+								String[] SplittedRulesAgain = rulesSplitted[x].split(",");	
+								if(SplittedRulesAgain.equals(SplittedRules[j]))
+								{
+									if(!(first[x].contains("e")))
+									{
+										epsilon = false;
+									}
+								}
+							}
+						}
+					}
+				}
+				if(epsilon && !(first[i].contains("e")) )
+				{
+					first[i] = first[i] + "e" ;
+					change =  true ;
+				}			
+			}
+			System.out.println(first[0] + " FIRST s");
+			System.out.println(first[1] + " FIRST a");
+			System.out.println(first[2] + " FIRST b");
+			System.out.println(first[3] + " FIRST b");
+			for(int i = 0 ; i < rulesSplitted.length ; i++)
+			{
+			String[] SplittedRulesAgain = rulesSplitted[i].split(",");	
+			for(int j = 1 ; j < SplittedRulesAgain.length ; j++ )
+			{
+				System.out.println(SplittedRulesAgain[j] + " start");
+				System.out.println(SplittedRulesAgain[j].length());
+				Boolean add = true ;
+				for (int z = 0 ; z < SplittedRulesAgain[j].length() && add ; z ++ )
+					{	
+						for(int x = 0 ; x < SplittedRulesAgain[j].length() ; x ++ )
+						{
+							System.out.println(SplittedRulesAgain[j].charAt(x) + " char");
+							if(Character.isLowerCase(SplittedRulesAgain[j].charAt(x)))
+							{	
+											
+								if(!(first[i].contains(String.valueOf(SplittedRulesAgain[j].charAt(x)))) && add)
+								{	
+								first[i] = first[i] + SplittedRulesAgain[j].charAt(x);
+								change = true;
+								}
+								add = false ;
+								System.out.println(add);
+							}
+							else
+							{   
+								System.out.println(add+ " in");
+								for(int c = 0 ; c < rulesSplitted.length ; c ++ )
+								{			
+									String[] SplittedRules2 = rulesSplitted[c].split(",");	
+									char arf = SplittedRulesAgain[j].charAt(x);
+									char zft = SplittedRules2[0].charAt(0);
+									if(arf == zft )
+									{									
+										
+										for ( int v = 0 ; v < first[c].length() && add; v ++)
+										{
+																					
+											if(!(first[i].contains(String.valueOf(first[c].charAt(v)))) && !(String.valueOf(first[c].charAt(v)).equals("e")) && add)
+													{
+											
+														first[i] = first[i] + first[c].charAt(v);
+														change = true;
+
+													}
+										}
+										if(!(first[c].contains("e")) )
+										{
+											add = false;
+										}
+									}
+								}
+							}
+						}
+					}
+			}
+			}
+			System.out.println("---------");
+			System.out.println(first[0] + " FIRST s");
+			System.out.println(first[1] + " FIRST a");
+			System.out.println(first[2] + " FIRST b");
+			System.out.println(first[3] + " FIRST b");
+
+
+		}
+
+		return null;
+	}
+
+	public String follow() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static void main (String[] args)
+	{
+		FFCFG cfg = new FFCFG("S,DajQ,QI;D,aSf,QaS,e;Q,sS,hi,e;I,IS,IsQj,z,xy");
+		//S,ahsxz;D,aehs;Q,ehs;I,xz
+		cfg.first();
+		
+	}
+}

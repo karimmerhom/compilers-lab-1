@@ -1,0 +1,115 @@
+package csen1002.main.task5;
+
+import java.io.Console;
+
+/**
+ * Write your info here
+ * 
+ * @name John Smith
+ * @id 43-0234
+ * @labNumber 07
+ */
+public class CFG {
+	/**
+	 * CFG constructor
+	 * 
+	 * @param description is the string describing a CFG
+	 */
+	String[] language ;
+	public CFG(String description) {
+		// TODO Write Your Code Here
+		
+	    language = description.split(";");
+	
+	}
+
+	/**
+	 * Returns a string of elimnated left recursion.
+	 * 
+	 * @param input is the string to simulate by the CFG.
+	 * @return string of elimnated left recursion.
+	 */
+	public String lre() {
+		String result = "";
+		System.out.println(language.length );
+		for(int i = 0 ; i < 3; i++)
+		{
+			for(int j = i-1 ; j >= 0 ; j--)
+			{
+				System.out.println("in");
+				String[] firstLanguage = language[i].split(",");
+				String firstLetter = firstLanguage[0];
+				String[] newLanguage = result.split(";");
+				for(int x = 1 ; x < firstLanguage.length; x++ )
+				{
+					String[] newLanguageSplit = newLanguage[j].split(",");
+					String newFirstLanguage=firstLetter ;
+					if(firstLanguage[x].substring(0,1).equals(newLanguageSplit[0]))
+					{				
+						System.out.println(firstLanguage[x] +" here");
+						String wantedPart = firstLanguage[x].substring(1,firstLanguage[x].length());
+					 for(int z = 1 ; z <newLanguageSplit.length ; z ++ )
+					 {
+						 newFirstLanguage+= ","+newLanguageSplit[z]+wantedPart;
+					 }
+					}
+					else
+					{
+						newFirstLanguage+= "," +firstLanguage[x];
+					}
+					System.out.println(newFirstLanguage + "here");
+				}
+				
+				
+			}
+			String[] firstLanguage = language[i].split(",");
+			String firstLetter = firstLanguage[0];
+			String alphas = "";
+			String betas = "";
+			for(int j = 1 ; j < firstLanguage.length ; j++ )
+			{
+			
+				if(firstLanguage[j].substring(0,1).equals(firstLetter))
+				{
+					alphas+=firstLanguage[j].substring(1,firstLanguage[j].length())+";";
+				}
+				else
+				{
+					betas+=firstLanguage[j]+";";
+				}
+				
+			}
+			String[] betasSplit = betas.split(";");
+			if(alphas.length() == 0)
+			{
+				result+= language[i]+";";
+			}
+			else
+			{
+				result+=firstLetter;
+			for(int j = 0 ; j < betasSplit.length ; j ++ )
+			{
+				result+=","+betasSplit[j]+firstLetter+"'";
+			}
+			result+=";"+firstLetter+"'";
+			String[] alphasSplit = alphas.split(";");
+			for(int j = 0 ; j < alphasSplit.length ; j ++ )
+			{
+				result+=","+alphasSplit[j]+firstLetter+"'";
+			}
+			result+=",";
+			result+="e";
+			result+=";";
+			}
+			}
+		System.out.println(result);
+		return result;
+	}
+	
+	public static void main (String[] args)
+	{
+		CFG cfg = new CFG("S,ScT,Sa,T,b;T,aSb,iaLb,i;L,SdL,S");
+		cfg.lre();
+		
+	}
+}

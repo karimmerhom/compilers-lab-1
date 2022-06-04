@@ -1,0 +1,56 @@
+package csen1002.main.task1;
+
+import java.util.ArrayList;
+
+/**
+ * Write your info here
+ * 
+ * @name Karim Ebrahim Merhom
+ * @id 43--414
+ * @labNumber 10
+ */
+
+public class DFA {
+	
+	
+	 class state{
+		String stateName;
+		String transOnZero;
+		String transOnOne;
+		
+		public state(String stateName , String transOnZero ,String transOnOne )
+		{
+			this.stateName = stateName;
+		    this.transOnZero = transOnZero;
+		    this.transOnOne = transOnOne;
+		}
+	}
+
+	 ArrayList<state> states = new ArrayList<state>();
+	 ArrayList<String> AcceptStates = new ArrayList<String>();
+	 
+	public DFA(String description) {
+		// TODO Write Your Code Here
+		 String[] descriptionSplit = description.split("#");
+		 String[] states = descriptionSplit[0].split(";");
+		 String[] acceptStates = descriptionSplit[1].split(",");
+		 System.out.println(states);
+		 System.out.println(acceptStates);
+	}
+
+	/**
+	 * Returns true if the string is accepted by the DFA and false otherwise.
+	 * 
+	 * @param input is the string to check by the DFA.
+	 * @return if the string is accepted or not.
+	 */
+	public boolean run(String input) {
+		// TODO Write Your Code Here
+		return false;
+		}
+	
+public static void main (String[] args)
+{
+	DFA dfa1 = new DFA("0,0,1;1,2,1;2,0,3;3,3,3#1,3");
+}
+}

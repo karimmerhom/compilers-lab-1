@@ -1,0 +1,391 @@
+package csen1002.main.task6;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Arrays;
+
+import csen1002.main.task5.CFG;
+
+/**
+ * Write your info here
+ * 
+ * @name John Smith
+ * @id 43-0234
+ * @labNumber 07
+ */
+
+public class FFCFG {
+ 
+	String rules = " " ;
+	
+	public FFCFG(String description) {
+
+		rules =  description;
+		
+	}
+
+	/**
+	 * Calculates the First of each variable in the CFG.
+	 * 
+	 * @return A string representation of the First of each variable in the CFG,
+	 *         formatted as specified in the task description.
+	 */
+	public String first() {
+		String[] rulesSplitted = rules.split(";");	
+		String[] first = new String [rulesSplitted.length];
+		for ( int i = 0 ; i < rulesSplitted.length ; i++ )
+		{
+			first[i] = "";
+		}
+		Boolean change = true ;
+		while(change)
+		{
+			Boolean epsilon = true;
+			change = false ;
+			for(int i = 0 ; i < rulesSplitted.length ; i++)
+			{
+				String[] SplittedRules = rulesSplitted[i].split(",");	
+				for(int j = 1 ; j < SplittedRules.length ; j++ )
+				{
+				    epsilon = true;
+					for(int z = 0 ; z < SplittedRules[j].length() && epsilon ; z++ )
+					{
+
+						if(Character.isLowerCase(SplittedRules[j].charAt(0)) && SplittedRules[j].length() != 1 )
+						{
+							
+							if(! first[i].contains(String.valueOf(SplittedRules[j].charAt(0))))
+							{
+							first[i] = first[i] + SplittedRules[j].charAt(0) ;
+							change = true ;
+							}
+							epsilon = false;
+						}
+						if(Character.isLowerCase(SplittedRules[j].charAt(z)) && SplittedRules[j].length() == 1 )
+						{
+							if(! first[i].contains(SplittedRules[j]))
+							{
+							first[i] = first[i] + SplittedRules[j] ;
+							change = true ;
+							epsilon = false ;
+							}
+						}
+						if(Character.isLowerCase(SplittedRules[j].charAt(z)) && SplittedRules[j].length() != 1 )
+						{
+							
+							epsilon = false ;
+						}
+						if(Character.isLowerCase(SplittedRules[j].charAt(z)) && !(SplittedRules[j].endsWith("e")) )
+						{
+							epsilon = false;
+						}
+						else
+						{
+							for(int x = 0 ; x < rulesSplitted.length ; x ++ )
+							{
+								String[] SplittedRulesAgain = rulesSplitted[x].split(",");	
+								if(SplittedRulesAgain[0].charAt(0) == SplittedRules[j].charAt(z))
+								{				
+									if(!(first[x].contains("e")))
+									{
+										epsilon = false;
+									}
+								}
+							}
+						}
+					}
+					if(epsilon && !(first[i].contains("e")) )
+					{
+						first[i] = first[i] + "e" ;
+						change =  true ;
+					}	
+				}
+						
+			}
+			for(int i = 0 ; i < rulesSplitted.length ; i++)
+			{
+			String[] SplittedRulesAgain = rulesSplitted[i].split(",");	
+			for(int j = 1 ; j < SplittedRulesAgain.length ; j++ )
+			{
+				Boolean add = true ;
+				for (int z = 0 ; z < SplittedRulesAgain[j].length() && add ; z ++ )
+					{	
+						for(int x = 0 ; x < SplittedRulesAgain[j].length() ; x ++ )
+						{
+							if(Character.isLowerCase(SplittedRulesAgain[j].charAt(x)))
+							{	
+											
+								if(!(first[i].contains(String.valueOf(SplittedRulesAgain[j].charAt(x)))) && add && (SplittedRulesAgain[j].charAt(x) != 'e'))
+								{	
+								first[i] = first[i] + SplittedRulesAgain[j].charAt(x);
+								change = true;
+								}
+								add = false ;
+							}
+							else
+							{   
+								for(int c = 0 ; c < rulesSplitted.length ; c ++ )
+								{			
+									String[] SplittedRules2 = rulesSplitted[c].split(",");	
+									char arf = SplittedRulesAgain[j].charAt(x);
+									char zft = SplittedRules2[0].charAt(0);
+									if(arf == zft )
+									{									
+										
+										for ( int v = 0 ; v < first[c].length() && add; v ++)
+										{
+																					
+											if(!(first[i].contains(String.valueOf(first[c].charAt(v)))) && !(String.valueOf(first[c].charAt(v)).equals("e")) && add)
+													{
+											
+														first[i] = first[i] + first[c].charAt(v);
+														change = true;
+
+													}
+										}
+										if(!(first[c].contains("e")) )
+										{
+											add = false;
+										}
+									}
+								}
+							}
+						}
+					}
+			}
+			}
+		}
+		String FinalAnswer="";
+		for(int i = 0 ; i < first.length ; i++)
+		{
+			FinalAnswer+=rulesSplitted[i].split(",")[0]+",";
+			String[] sortArr = first[i].split("");
+			Arrays.sort(sortArr);
+			String finalValue = "";
+			for( int y = 0 ; y < sortArr.length ; y++)
+			{
+				finalValue+= sortArr[y];
+			}
+			first[i] = finalValue;
+			if(i == first.length -1)
+			{
+			FinalAnswer+=finalValue;
+			}
+			else
+			{
+			FinalAnswer+=finalValue+";";
+			}
+		}
+
+		return FinalAnswer;
+	}
+
+	public String follow() {
+		String[] rulesSplitted = rules.split(";");	
+		String[] follow = new String [rulesSplitted.length];
+		for ( int i = 0 ; i < rulesSplitted.length ; i++ )
+		{
+			follow[i] = "";
+		}
+		for(int i = 0 ; i < rulesSplitted.length ; i++ )
+		{
+			if((rulesSplitted[i].split(",")[0]).equals("S"))
+			{
+				follow[i] = follow[i] +"$";
+			}
+		}
+		String first[] = this.first().split(";");
+		Boolean change = true ;
+		while(change)
+		{
+			change = false ;
+			for(int i = 0 ; i < rulesSplitted.length ; i++)
+			{
+				String[] rule = rulesSplitted[i].split(",");
+				for(int j = 1 ; j < rule.length ; j++ )
+				{
+					System.out.println(rule[j] +" vvvvvvv");
+					boolean noB = true ;
+					for(int z = 0 ; z < rule[j].length() ; z ++ )
+					{
+						String a ="";
+						String b ="";
+						String beta ="";
+						if(Character.isUpperCase(rule[j].charAt(z)))
+						{
+							noB = false ;
+							b+=rule[j].charAt(z);
+							if(z == 0)
+							{
+								a+="e";
+								if(!(z+1 == rule[j].length()))
+								{
+								beta = rule[j].substring(z+1,rule[j].length());
+								}
+								else
+								{
+									beta+="e";
+								}
+							}
+							else if(z == rule[j].length()-1)
+							{
+								a+=rule[j].substring(0,z);
+								beta = "e";
+							}
+							else
+							{
+								a+=rule[j].substring(0,z);
+								beta = rule[j].substring(z+1,rule[j].length());
+							}
+							
+							String firstB ="";
+							String firstBeta = "" ;
+							boolean add = true ;
+							for(int x = 0 ; x < beta.length() && add ; x ++ ) {
+							if(Character.isUpperCase(beta.charAt(x)))
+							{
+							for(int y = 0 ; y < rulesSplitted.length ; y ++ )
+							{
+								String[] rule1 = rulesSplitted[y].split(",");
+								if(rule1[0].equals(String.valueOf(beta.charAt(x))))
+								{
+									for(int t = 0 ; t < first[y].length(); t++)
+									{
+										if(!(firstBeta.contains(String.valueOf(first[y].charAt(t)))) && !(String.valueOf(first[y].charAt(t)).equals("e")))
+										firstBeta += first[y].split(",")[1];
+									}
+									if(!((first[y].split(",")[1]).contains("e")))
+									{
+										add = false;
+									}
+								}	
+							}
+							}
+							else
+							{
+							
+								firstBeta += beta.charAt(x);
+								add = false;
+							}
+							}
+							if(add)
+							{
+								firstBeta += "t";
+							}
+								boolean add2 = true ;
+								for(int x = 0 ; x < b.length() && add2 ; x ++ ) {
+								if(Character.isUpperCase(b.charAt(x)))
+								{
+								for(int y = 0 ; y < rulesSplitted.length ; y ++ )
+								{
+									String[] rule1 = rulesSplitted[y].split(",");
+									if(rule1[0].equals(b.substring(0,1)))
+									{
+										firstB += first[y].split(",")[1];
+										if(!((first[y].split(",")[1]).contains("e")))
+										{
+											add2 = false;
+										}
+									}	
+								}
+								}
+								else
+								{
+								
+									firstB += b.charAt(x);
+									add2 = false;
+									
+								}
+								}
+								System.out.println(a+" alpha");
+								System.out.println(b+" b");
+								System.out.println(firstB+" first b");
+								System.out.println(beta+" beta");
+								System.out.println(firstBeta+" first beta");
+								
+								for(int m = 0 ; m < firstBeta.length() ; m ++)
+								{
+									int index = 0;
+									for(int g = 0 ; g < rulesSplitted.length ; g++)
+									{
+										String[] rule11 = rulesSplitted[g].split(",");
+										if(b.equals(rule11[0]))
+										{
+											index = g ;
+										}
+									}
+										
+									if(!(follow[index].contains(String.valueOf(firstBeta.charAt(m)))))
+											{
+												if(!(String.valueOf(firstBeta.charAt(m)).equals("e"))){
+												follow[index] = follow[index] + String.valueOf(firstBeta.charAt(m));
+												change = true ;
+												}
+											}
+								}
+								System.out.println(follow[1]+" checkkkk");
+								if(firstBeta.contains("e"))
+								{
+								
+								for(int m = 0 ; m <follow[i].length() ; m ++)
+								{
+									int index = 0;
+									for(int g = 0 ; g < rulesSplitted.length ; g++)
+									{
+										String[] rule11 = rulesSplitted[g].split(",");
+										if(b.equals(rule11[0]))
+										{
+											index = g ;
+										}
+									}
+									System.out.println(a);
+									System.out.println(b);
+									System.out.println(beta);
+									System.out.println(firstBeta);
+									if(!(follow[index].contains(String.valueOf(follow[i].charAt(m)))))
+											{
+												if(!(String.valueOf(follow[i].charAt(m)).equals("e"))){
+												follow[index] = follow[index] + String.valueOf(follow[i].charAt(m));
+												change = true ;
+												}
+											}
+								}
+								}
+								System.out.println(follow[1]+"checkkkk2");
+							}
+						}
+					}
+				}
+			}
+		String FinalAnswer="";
+		for(int i = 0 ; i < first.length ; i++)
+		{
+			FinalAnswer+=rulesSplitted[i].split(",")[0]+",";
+			String[] sortArr = follow[i].split("");
+			Arrays.sort(sortArr);
+			String finalValue = "";
+			for( int y = 0 ; y < sortArr.length ; y++)
+			{
+				finalValue+= sortArr[y];
+			}
+			first[i] = finalValue;
+			if(i == follow.length -1)
+			{
+			FinalAnswer+=finalValue;
+			}
+			else
+			{
+			FinalAnswer+=finalValue+";";
+			}
+		}
+		System.out.println(FinalAnswer);
+		return FinalAnswer;
+	}
+
+	public static void main (String[] args)
+	{
+		FFCFG cfg = new FFCFG("S,aBDh;B,cA;A,bA,e;D,EF;E,g,e;F,f,e");
+		cfg.follow();
+		//S,$;B,fgh;A,fgh;D,h;E,fh;F,h
+	}
+}

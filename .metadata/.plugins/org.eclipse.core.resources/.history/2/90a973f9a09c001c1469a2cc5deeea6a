@@ -1,0 +1,36 @@
+package csen1002.main.task1;
+
+/**
+ * Write your info here
+ * 
+ * @name Karim Ebrahim Merhom
+ * @id 43--414
+ * @labNumber 10
+ */
+public class DFA {
+	/**
+	 * DFA constructor
+	 * 
+	 * @param description is the string describing a DFA
+	 */
+	public DFA(String description) {
+		// TODO Write Your Code Here
+		
+	}
+
+	/**
+	 * Returns true if the string is accepted by the DFA and false otherwise.
+	 * 
+	 * @param input is the string to check by the DFA.
+	 * @return if the string is accepted or not.
+	 */
+	public boolean run(String input) {
+		// TODO Write Your Code Here
+		return false;
+		}
+	
+public static void main (String[] args)
+{
+	System.out.println("hello world");
+}
+}
